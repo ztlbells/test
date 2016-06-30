@@ -41,16 +41,15 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
 func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("invoke is running " + function)
 
-  	var key, value string
+  	var value string
 	var err error
 	
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
 	}
 
-	key = args[0] //rename for funsies
-	value = args[1]
-	err = stub.PutState(key, []byte(value)) //write the variable into the chaincode state
+	value = args[0]
+	err = stub.PutState("hello_world", []byte(value)) //write the variable into the chaincode state
 	if err != nil {
 		return nil, err
 	}
@@ -71,14 +70,13 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("query is running " + function)
 	
-	if len(args) != 2 {
+	if len(args) != 0 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
 	}
 	
-	var value string
 	var err error
   
-  	err = stub.PutState("hello_world", []byte(value))
+  	err = stub.GetState("hello_world", []byte(value))
   
   	if err != nil {
 		return nil, err
