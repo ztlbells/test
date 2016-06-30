@@ -70,18 +70,20 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("query is running " + function)
 	
+	var value string
+	
 	if len(args) != 0 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
 	}
 	
 	var err error
   
-  	err = stub.GetState("hello_world")
+  	value,err = stub.GetState("hello_world")
   
   	if err != nil {
 		return nil, err
 	}
-	return nil, nil
+	return value, nil
 
 	// Handle different functions
 // 	if function == "read" { //read a variable
