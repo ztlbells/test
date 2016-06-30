@@ -76,7 +76,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 	
 	var err error
   
-  	err = stub.GetState("hello_world", []byte(value))
+  	err = stub.GetState("hello_world")
   
   	if err != nil {
 		return nil, err
