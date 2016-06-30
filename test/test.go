@@ -78,12 +78,12 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 	
 	var err error
   
-  	value,err = stub.GetState("hello_world")
+  	valAsbytes,err = stub.GetState("hello_world")
   
   	if err != nil {
 		return nil, err
 	}
-	return value, nil
+	return valAsbytes, nil
 
 	// Handle different functions
 // 	if function == "read" { //read a variable
