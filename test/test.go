@@ -61,7 +61,6 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("query is running " + function)
 	
-	var value []byte
 	var jsonResp []byte
 	
 	if len(args) != 0 {
@@ -70,7 +69,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 	
 	var err error
   
-  	value,err = stub.GetState("hello_world")
+  	jsonResp,err = stub.GetState("hello_world")
   
   	if err != nil {
 		return nil, err
