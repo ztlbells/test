@@ -62,6 +62,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 	fmt.Println("query is running " + function)
 	
 	var value []byte
+	var jsonResp []byte
 	
 	if len(args) != 0 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
@@ -74,6 +75,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
   	if err != nil {
 		return nil, err
 	}
-	return value, nil
-
+	
+	jsonResp = "{\"Error\":\"Failed to get state for " + key + "\"}"
+	return jsonResp, nil
 }
