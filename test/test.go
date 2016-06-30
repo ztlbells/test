@@ -1,5 +1,5 @@
 /*
-	auther:swb
+	author:swb
 	time:16/06/30
 	MIT License
 */
