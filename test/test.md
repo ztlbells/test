@@ -51,7 +51,7 @@
   - ID 交易ID
  
 #### 接口设计
-`createBank`:
+- `createBank`:
 
 request参数:
 ```
@@ -62,7 +62,7 @@ response参数:
 {"Name":"XXX","TotalNumber":"0","RestNumber":"0","ID":"XX"}
 ```
 
-`createCompany`
+- `createCompany`
 request参数:
 ```
 args[0] 公司名称
@@ -71,7 +71,7 @@ response参数:
 ```
 {"Name":"XXX","Number":"0","ID":"XX"}
 ```
-`issueCoin`
+- `issueCoin`
 request参数:
 ```
 args[0] 再次发行货币数额
@@ -81,7 +81,7 @@ response参数:
 {"FromType":"0","FromID":"0","ToType":"0","ToID":"0","Time":"XX","Number":"XX","ID":"XX"}
 ```
 
-`issueCoinToBank`
+- `issueCoinToBank`
 request参数:
 ```
 args[0] 商业银行ID
@@ -92,7 +92,7 @@ response参数:
 {"FromType":"0","FromID":"0","ToType":"1","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"}
 ```
 
-`issueCoinToCp`
+- `issueCoinToCp`
 request参数:
 ```
 args[0] 商业银行ID
@@ -104,7 +104,7 @@ response参数:
 {"FromType":"0","FromID":"0","ToType":"2","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"}
 ```
 
-`transfer`
+- `transfer`
 request参数:
 ```
 args[0] 转账用户ID
@@ -115,7 +115,7 @@ response参数:
 ```
 {"FromType":"2","FromID":"XX","ToType":"2","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"}
 ```
-`getBanks`
+- `getBanks`
 request参数
 ```
 ```
@@ -124,7 +124,7 @@ response参数
 [{"Name":"XXX","Number":"XX","ID":"XX"},{"Name":"XXX","Number":"XX","ID":"XX"},...]
 ```
 
-`getCompanys`
+- `getCompanys`
 request参数
 ```
 ```
@@ -133,7 +133,7 @@ response参数
 [{"Name":"XXX","TotalNumber":"XX","RestNumber":"XX","ID":"XX"},{"Name":"XXX","TotalNumber":"XX","RestNumber":"XX","ID":"XX"},...]
 ```
 
-`getTransactions`
+- `getTransactions`
 request参数
 ```
 ```
@@ -141,7 +141,7 @@ response参数
 ```
 [{"FromType":"XX","FromID":"XX","ToType":"XX","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"},{"FromType":"XX","FromID":"XX","ToType":"XX","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"},...]
 ```
-`getCenterBank`
+- `getCenterBank`
 request参数
 ```
 ```
@@ -150,7 +150,7 @@ response参数
 [{"Name":"XX","TotalNumber":"XX","RestNumber":"XX","ID":"XX"}]
 ```
 
-`getBankById`
+- `getBankById`
 request参数
 ```
 args[0] 商业银行ID
@@ -160,7 +160,7 @@ response参数
 [{"Name":"XX","TotalNumber":"XX","RestNumber":"XX","ID":"XX"}]
 ```
 
-`getCompanyById`
+- `getCompanyById`
 request参数
 ```
 args[0] 企业ID
@@ -169,7 +169,7 @@ response参数
 ```
 [{"Name":"XXX","Number":"XX","ID":"XX"}]
 ```
-`getTransactionById`
+- `getTransactionById`
 request参数
 ```
 args[0] 交易ID
