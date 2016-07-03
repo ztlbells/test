@@ -91,7 +91,6 @@ func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args
 // Query is our entry point for queries
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("query is running " + function)
-	var err error
 	
 	if len(args) < 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1. name of the key and value to set")
