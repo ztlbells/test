@@ -63,6 +63,7 @@ response参数:
 ```
 
 - `createCompany`
+
 request参数:
 ```
 args[0] 公司名称
@@ -72,6 +73,7 @@ response参数:
 {"Name":"XXX","Number":"0","ID":"XX"}
 ```
 - `issueCoin`
+
 request参数:
 ```
 args[0] 再次发行货币数额
@@ -82,6 +84,7 @@ response参数:
 ```
 
 - `issueCoinToBank`
+
 request参数:
 ```
 args[0] 商业银行ID
@@ -93,6 +96,7 @@ response参数:
 ```
 
 - `issueCoinToCp`
+
 request参数:
 ```
 args[0] 商业银行ID
@@ -105,6 +109,7 @@ response参数:
 ```
 
 - `transfer`
+
 request参数:
 ```
 args[0] 转账用户ID
@@ -116,6 +121,7 @@ response参数:
 {"FromType":"2","FromID":"XX","ToType":"2","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"}
 ```
 - `getBanks`
+
 request参数
 ```
 ```
@@ -125,6 +131,7 @@ response参数
 ```
 
 - `getCompanys`
+
 request参数
 ```
 ```
@@ -134,6 +141,7 @@ response参数
 ```
 
 - `getTransactions`
+
 request参数
 ```
 ```
@@ -142,6 +150,7 @@ response参数
 [{"FromType":"XX","FromID":"XX","ToType":"XX","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"},{"FromType":"XX","FromID":"XX","ToType":"XX","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"},...]
 ```
 - `getCenterBank`
+
 request参数
 ```
 ```
@@ -151,6 +160,7 @@ response参数
 ```
 
 - `getBankById`
+
 request参数
 ```
 args[0] 商业银行ID
@@ -161,6 +171,7 @@ response参数
 ```
 
 - `getCompanyById`
+
 request参数
 ```
 args[0] 企业ID
@@ -170,6 +181,7 @@ response参数
 [{"Name":"XXX","Number":"XX","ID":"XX"}]
 ```
 - `getTransactionById`
+
 request参数
 ```
 args[0] 交易ID
