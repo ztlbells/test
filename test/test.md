@@ -122,9 +122,6 @@ response参数:
 ```
 - `getBanks`
 
-request参数
-```
-```
 response参数
 ```
 [{"Name":"XXX","Number":"XX","ID":"XX"},{"Name":"XXX","Number":"XX","ID":"XX"},...]
@@ -132,9 +129,6 @@ response参数
 
 - `getCompanys`
 
-request参数
-```
-```
 response参数
 ```
 [{"Name":"XXX","TotalNumber":"XX","RestNumber":"XX","ID":"XX"},{"Name":"XXX","TotalNumber":"XX","RestNumber":"XX","ID":"XX"},...]
@@ -142,18 +136,12 @@ response参数
 
 - `getTransactions`
 
-request参数
-```
-```
 response参数
 ```
 [{"FromType":"XX","FromID":"XX","ToType":"XX","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"},{"FromType":"XX","FromID":"XX","ToType":"XX","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"},...]
 ```
 - `getCenterBank`
 
-request参数
-```
-```
 response参数
 ```
 [{"Name":"XX","TotalNumber":"XX","RestNumber":"XX","ID":"XX"}]
