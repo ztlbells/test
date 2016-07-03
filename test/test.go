@@ -47,7 +47,7 @@ type Transaction struct{
 	FromID int   
 	ToType int   //Bank 0 Company 1 
 	ToID int
-	Time String
+	Time string
 	Number int
 }
 
