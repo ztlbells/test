@@ -14,9 +14,9 @@
 - `query`   查询相关的信息
 - `createBank`   新增商业银行，同时央行向其发行一定数量的货币
 - `createCompany`   新增企业
-- `issueCoin` 央行再次发行一定数量的货币
-- `issueCoinToCp`  商业银行向企业转一定数量的数字货币
-- `transfer`   企业之间进行相互转账
+- `issueCoin` 央行再次发行一定数量的货币 （属于交易行为）
+- `issueCoinToCp`  商业银行向企业转一定数量的数字货币  （属于交易行为）
+- `transfer`   企业之间进行相互转账  （属于交易行为）
 - `getCompanys`   获取所有的公司信息
 - `getBanks`    获取所有的商业银行信息
 - `getTransactions` 获取所有的交易记录
