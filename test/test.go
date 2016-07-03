@@ -65,8 +65,8 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
 	}
 	var centerBank CenterBank
 	var totalNumber int
-	totalNumber = args[1]
-	centerBank = CenterBank{name:args[0],TotalNumber:strconv.Atoi(totalNumber),RestNubmer:0}
+	totalNumber = strconv.Atoi(args[1])
+	centerBank = CenterBank{name:args[0],TotalNumber:totalNumber,RestNubmer:0}
 	centerBankBytes, err := json.Marshal(&centerBank)
 	if err != nil {
 		return nil, err
