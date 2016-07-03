@@ -64,7 +64,9 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
 		return nil, errors.New("Incorrect number of arguments. Expecting 2")
 	}
 	var centerBank CenterBank
-	centerBank = CenterBank{name:args[0],TotalNumber:strconv.Atoi(args[1]),RestNubmer:0}
+	var totalNumber int
+	totalNumber = args[1]
+	centerBank = CenterBank{name:args[0],TotalNumber:strconv.Atoi(totalNumber),RestNubmer:0}
 	centerBankBytes, err := json.Marshal(&centerBank)
 	if err != nil {
 		return nil, err
