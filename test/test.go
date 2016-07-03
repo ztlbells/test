@@ -75,6 +75,6 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 		return nil, err
 	}
 	
-	jsonResp = []byte("{"Error":"Failed to get state for"}")
+	jsonResp = []byte("{\"Error\":\"Failed to get state for\"}")
 	return jsonResp, nil
 }
