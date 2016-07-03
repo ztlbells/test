@@ -118,7 +118,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 
 func GetCenterBank(stub *shim.ChaincodeStub) (CenterBank, error){
 	var centerBank CenterBank
-	cbBytes, err := stub.GetState(centerBank)	
+	cbBytes, err := stub.GetState("centerBank")	
 	if err != nil {
 		fmt.Println("Error retrieving cbBytes")
 	}
