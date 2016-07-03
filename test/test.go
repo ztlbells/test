@@ -9,11 +9,46 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strconv"
+	"encoding/json"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
+
+var bankNo int = 0
+var cpNo int= 0
+
+
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
+}
+
+type CenterBank struct{
+	name string
+	TotalNumber int
+	RestNubmer int
+}
+
+type Bank struct{
+	name string
+	TotalNumber int
+	RestNubmer int
+	ID int
+}
+
+type Company struct{
+	name string
+	Number int
+	ID int
+}
+
+type Transaction struct{
+	FromType int  //Bank 0  Company 1
+	FromID int   
+	ToType int   //Bank 0 Company 1 
+	ToID int
+	Time String
+	Number int
 }
 
 func main() {
@@ -25,56 +60,72 @@ func main() {
 
 // Init resets all the things
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-	if len(args) != 1 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 1")
+	if len(args) != 2 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 2")
 	}
-
-	err := stub.PutState("hello_world", []byte(args[0]))
+	
+	var centerBank = CenterBank{name:args[0],TotalNumber:strconv.Atoi(args[1]),RestNubmer:0}
+	centerBankBytes, err := json.Marshal(&centerBank)
 	if err != nil {
 		return nil, err
 	}
-
+	err = stub.PutState("centerBank", centerBankBytes)
+	if err != nil {
+		return nil, errors.New("PutState Error" + err.Error())
+	}
 	return nil, nil
 }
 
 // Invoke isur entry point to invoke a chaincode function
 func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-	fmt.Println("invoke is running " + function)
-
-  	var value string
-	var err error
-	
-	if len(args) != 1 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
-	}
-
-	value = args[0]
-	err = stub.PutState("hello_world", []byte(value)) //write the variable into the chaincode state
-	if err != nil {
-		return nil, err
-	}
 	return nil, nil
-	
 }
+
+
 
 // Query is our entry point for queries
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("query is running " + function)
 	
-	var jsonResp []byte
-	
-	if len(args) != 0 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 2. name of the key and value to set")
-	}
-	
+	var function string
 	var err error
-  
-  	jsonResp,err = stub.GetState("hello_world")
-  
-  	if err != nil {
-		return nil, err
-	}
 	
-	jsonResp = []byte("{\"Error\":\"Failed to get state for\"}")
-	return jsonResp, nil
+	if len(args) < 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 1. name of the key and value to set")
+	}
+	function = args[0]
+  	
+  	if args[0] == "GetCenterBank" {
+  		centerBank,err := GetCenterBank(stub)
+  		if err != nil {
+			fmt.Println("Error Getting particular cp")
+			return nil, err
+		}else{
+			cbBytes,err1 = json.Marshal(&centerBank)
+			if err1 != nil {
+				fmt.Println("Error marshalling the cp")
+				return nil, err1
+			}	
+			fmt.Println("All success, returning the cp")
+			return cbBytes, nil	
+		}
+  	}else{
+  		return nil, nil
+  	}
+	
 }
+
+
+func GetCenterBank(stub *shim.ChaincodeStub) (CenterBank, error){
+	var centerBank CenterBank
+	cbBytes, err := stub.GetState(centerBank)	
+	if err != nil {
+		fmt.Println("Error retrieving cbBytes")
+	}
+	err = json.Unmarshal(cbBytes, &centerBank)
+	if err != nil {
+		fmt.Println("Error unmarshalling centerBank")
+	}
+		
+	return centerBank, nil
+
