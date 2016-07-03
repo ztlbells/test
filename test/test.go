@@ -177,7 +177,6 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 		}
 		return tsBytes, nil
 	}
-
 }
 
 func getCenterBank(stub *shim.ChaincodeStub) (CenterBank, error) {
