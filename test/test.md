@@ -51,15 +51,13 @@
 #### 接口设计
 `createBank`:
 
-
 request参数:
 ```
-
+args[0] 银行名称
 ```
-
 response参数:
 ```
-
+{"Name":"XXX","TotalNumber":"0","RestNumber":"0","ID":"Xx"}
 ```
 #### 其它
 对于查询请求，为了兼顾读写速度，将一些信息备份存放在非区块链数据库上也是一个较好的选择。
