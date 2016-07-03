@@ -101,7 +101,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 			fmt.Println("Error Getting particular cp")
 			return nil, err
 		}else{
-			cbBytes,err1 = json.Marshal(&centerBank)
+			cbBytes,err1 := json.Marshal(&centerBank)
 			if err1 != nil {
 				fmt.Println("Error marshalling the cp")
 				return nil, err1
