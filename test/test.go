@@ -128,4 +128,4 @@ func GetCenterBank(stub *shim.ChaincodeStub) (CenterBank, error){
 	}
 		
 	return centerBank, nil
-
+}
