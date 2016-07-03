@@ -6,6 +6,7 @@
 - 新增企业
 - 商业银行向企业转给一定数量的数字货币
 - 企业之间进行相互的转账
+- 查询企业、银行、交易信息
 
 #### function及各自实现的功能：
 - `init`  初始化中央银行，并发行一定数量的货币
@@ -18,29 +19,34 @@
 - `transfer`   企业之间进行相互转账
 - `getCompanys`   获取所有的公司信息
 - `getBanks`    获取所有的商业银行信息
-- `getCompany`   获取某家公司信息
-- `getBank`   获取某家银行信息
-- `getTransaction` 获取所有的企业之间转账的交易记录
+- `getTransactions` 获取所有的交易记录
+- `getCompanyById`   获取某家公司信息
+- `getBankById`   获取某家银行信息
+- `getTransactionBy` 获取某笔交易记录
+
 
 #### 数据结构设计
 - centerBank 中央银行
-  - name 名称
-  - totalNumber 发行货币总数额
-  - restNumber 账户余额
+  - Name 名称
+  - TotalNumber 发行货币总数额
+  - RestNumber 账户余额
 - bank  商业银行
-  - name 名称
-  - totalNumber 收到货币总数额
-  - restNumber 账户余额
-  - id 银行id
+  - Name 名称
+  - TotalNumber 收到货币总数额
+  - RestNumber 账户余额
+  - ID 银行id
 - company 企业
-  - name 名称
-  - number  账户余额
-  - id 企业id
+  - Name 名称
+  - Number  账户余额
+  - ID 企业id
 - transaction 交易内容
-  - from 发送方企业id
-  - to  接收方企业id
-  - time  交易时间
-  - number 交易数额
+  - FromType 发送方角色
+  - FromID 发送方ID
+  - ToType  接收方角色
+  - ToID 接收方ID
+  - Time  交易时间
+  - Number 交易数额
+  - ID 交易ID
  
 #### 接口设计
 `createBank`:
