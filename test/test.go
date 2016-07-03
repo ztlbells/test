@@ -24,20 +24,20 @@ type SimpleChaincode struct {
 }
 
 type CenterBank struct{
-	name string
+	Name string
 	TotalNumber int
 	RestNubmer int
 }
 
 type Bank struct{
-	name string
+	Name string
 	TotalNumber int
 	RestNubmer int
 	ID int
 }
 
 type Company struct{
-	name string
+	Name string
 	Number int
 	ID int
 }
@@ -69,7 +69,7 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
 	if err != nil {
 		return nil, errors.New("Expecting integer value for asset holding")
 	}
-	centerBank = CenterBank{name:args[0],TotalNumber:totalNumber,RestNubmer:0}
+	centerBank = CenterBank{Name:args[0],TotalNumber:totalNumber,RestNubmer:0}
 	centerBankBytes, err := json.Marshal(&centerBank)
 	if err != nil {
 		return nil, err
