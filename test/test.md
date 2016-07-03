@@ -14,9 +14,10 @@
 - `query`   查询相关的信息
 - `createBank`   新增商业银行，同时央行向其发行一定数量的货币
 - `createCompany`   新增企业
-- `issueCoin` 央行再次发行一定数量的货币 （属于交易行为）
-- `issueCoinToCp`  商业银行向企业转一定数量的数字货币  （属于交易行为）
-- `transfer`   企业之间进行相互转账  （属于交易行为）
+- `issueCoin` 央行再次发行一定数量的货币 （归于交易）
+- `issueCoinToBank` 央行向商业银行转一定数量的数字货币 （归于交易）
+- `issueCoinToCp`  商业银行向企业转一定数量的数字货币  （归于交易行为）
+- `transfer`   企业之间进行相互转账  （归于交易行为）
 - `getCompanys`   获取所有的公司信息
 - `getBanks`    获取所有的商业银行信息
 - `getTransactions` 获取所有的交易记录
@@ -30,6 +31,7 @@
   - Name 名称
   - TotalNumber 发行货币总数额
   - RestNumber 账户余额
+  - ID ID固定为0
 - bank  商业银行
   - Name 名称
   - TotalNumber 收到货币总数额
@@ -57,7 +59,124 @@ args[0] 银行名称
 ```
 response参数:
 ```
-{"Name":"XXX","TotalNumber":"0","RestNumber":"0","ID":"Xx"}
+{"Name":"XXX","TotalNumber":"0","RestNumber":"0","ID":"XX"}
+```
+
+`createCompany`
+request参数:
+```
+args[0] 公司名称
+```
+response参数:
+```
+{"Name":"XXX","Number":"0","ID":"XX"}
+```
+`issueCoin`
+request参数:
+```
+args[0] 再次发行货币数额
+```
+response参数:
+```
+{"FromType":"0","FromID":"0","ToType":"0","ToID":"0","Time":"XX","Number":"XX","ID":"XX"}
+```
+
+`issueCoinToBank`
+request参数:
+```
+args[0] 商业银行ID
+args[1] 转账数额
+```
+response参数:
+```
+{"FromType":"0","FromID":"0","ToType":"1","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"}
+```
+
+`issueCoinToCp`
+request参数:
+```
+args[0] 商业银行ID
+args[1] 企业ID
+args[2] 转账数额
+```
+response参数:
+```
+{"FromType":"0","FromID":"0","ToType":"2","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"}
+```
+
+`transfer`
+request参数:
+```
+args[0] 转账用户ID
+args[1] 被转账用户ID
+args[2] 转账余额
+```
+response参数:
+```
+{"FromType":"2","FromID":"XX","ToType":"2","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"}
+```
+`getBanks`
+request参数
+```
+```
+response参数
+```
+[{"Name":"XXX","Number":"XX","ID":"XX"},{"Name":"XXX","Number":"XX","ID":"XX"},...]
+```
+
+`getCompanys`
+request参数
+```
+```
+response参数
+```
+[{"Name":"XXX","TotalNumber":"XX","RestNumber":"XX","ID":"XX"},{"Name":"XXX","TotalNumber":"XX","RestNumber":"XX","ID":"XX"},...]
+```
+
+`getTransactions`
+request参数
+```
+```
+response参数
+```
+[{"FromType":"XX","FromID":"XX","ToType":"XX","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"},{"FromType":"XX","FromID":"XX","ToType":"XX","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"},...]
+```
+`getCenterBank`
+request参数
+```
+```
+response参数
+```
+[{"Name":"XX","TotalNumber":"XX","RestNumber":"XX","ID":"XX"}]
+```
+
+`getBankById`
+request参数
+```
+args[0] 商业银行ID
+```
+response参数
+```
+[{"Name":"XX","TotalNumber":"XX","RestNumber":"XX","ID":"XX"}]
+```
+
+`getCompanyById`
+request参数
+```
+args[0] 企业ID
+```
+response参数
+```
+[{"Name":"XXX","Number":"XX","ID":"XX"}]
+```
+`getTransactionById`
+request参数
+```
+args[0] 交易ID
+```
+response参数
+```
+{"FromType":"XX","FromID":"XX","ToType":"XX","ToID":"XX","Time":"XX","Number":"XX","ID":"XX"}
 ```
 #### 其它
-对于查询请求，为了兼顾读写速度，将一些信息备份存放在非区块链数据库上也是一个较好的选择。
+查询时为了兼顾读写速度，将一些信息备份存放在非区块链数据库上也是一个较好的选择。
