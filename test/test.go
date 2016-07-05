@@ -424,11 +424,10 @@ func (t *SimpleChaincode) transfer(stub *shim.ChaincodeStub, args []string) ([]b
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
 	fmt.Println("query is running " + function)
 
-	if len(args) == 0 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 1. name of the key and value to set")
-	}
-
 	if function == "getCenterBank" {
+		if len(args) ！= 0 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 0")
+		}
 		_,cbBytes, err := getCenterBank(stub)
 		if err != nil {
 			fmt.Println("Error get centerBank")
@@ -436,6 +435,9 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 		}
 		return cbBytes, nil
 	} else if function == "getBankById" {
+		if len(args) ！= 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 0")
+		}
 		_,bankBytes, err := getBankById(stub, args[0])
 		if err != nil {
 			fmt.Println("Error unmarshalling centerBank")
@@ -443,6 +445,9 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 		}
 		return bankBytes, nil
 	} else if function == "getCompanyById" {
+		if len(args) ！= 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 0")
+		}
 		_,cpBytes, err := getCompanyById(stub, args[0])
 		if err != nil {
 			fmt.Println("Error unmarshalling centerBank")
@@ -450,6 +455,9 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 		}
 		return cpBytes, nil
 	} else if function == "getTransactionById" {
+		if len(args) ！= 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 0")
+		}
 		_,tsBytes, err := getTransactionById(stub, args[0])
 		if err != nil {
 			fmt.Println("Error unmarshalling")
@@ -457,6 +465,9 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 		}
 		return tsBytes, nil
 	} else if function == "getBanks" {
+		if len(args) ！= 0 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 0")
+		}
 		banks, err := getBanks(stub)
 		if err != nil {
 			fmt.Println("Error unmarshalling")
@@ -468,6 +479,9 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 		}	
 		return bankBytes, nil
 	} else if function == "getCompanys" {
+		if len(args) ！= 0 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 0")
+		}
 		cps, err := getCompanys(stub)
 		if err != nil {
 			fmt.Println("Error unmarshalling")
@@ -479,6 +493,9 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 		}	
 		return cpBytes, nil
 	} else if function == "getTransactions" {
+		if len(args) ！= 0 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 0")
+		}
 		tss, err := getTransactions(stub)
 		if err != nil {
 			fmt.Println("Error unmarshalling")
