@@ -33,7 +33,7 @@ type CenterBank struct {
 type Bank struct {
 	Name        string
 	TotalNumber int
-	RestNubmer  int
+	RestNumber  int
 	ID          int
 }
 
