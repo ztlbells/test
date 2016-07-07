@@ -29,11 +29,11 @@ func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args [
 }
 
 func (t *SimpleChaincode) Invoke(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-
+	return nil,nil
 }
 
 func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
-
+	return nil,nil
 }
 
 func main() {
@@ -49,7 +49,7 @@ func GetAddress() (string,string,string) {
 	b := make([]byte, 48)
 
 	if _, err := io.ReadFull(rand.Reader, b); err != nil {
-		return ""
+		return "","",""
 	}
 
 	h := md5.New()
@@ -58,11 +58,11 @@ func GetAddress() (string,string,string) {
 	address = hex.EncodeToString(h.Sum(nil))
 	priKey = address+"1"
 	pubKey = address+"2"
-	
+
 	return address,priKey,pubKey
 }
 
 
 func (t *SimpleChaincode) createUser(stub *shim.ChaincodeStub, args []string) ([]byte, error) {
-
+	return nil,nil
 }
