@@ -52,7 +52,7 @@ func (t *SimpleChaincode) Query(stub *shim.ChaincodeStub, function string, args 
 		if len(args) != 1{
 			return nil, errors.New("Incorrect number of arguments. Expecting 1")
 		}
-		_,homeBytes,err = getHomeByAddress(stub,args[0])
+		_,homeBytes,err := getHomeByAddress(stub,args[0])
 		if err != nil {
 				fmt.Println("Error get home")
 				return nil, err
