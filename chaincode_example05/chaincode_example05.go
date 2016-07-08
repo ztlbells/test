@@ -144,5 +144,5 @@ func getHomeByAddress(stub *shim.ChaincodeStub, address string) (Home,[]byte, er
 }
 
 func getHomesByEnergyline(stub *shim.ChaincodeStub, address string)([]Home,[]byte,error){
-	return nil,nil
+	return nil,nil,nil
 }
