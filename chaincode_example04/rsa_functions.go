@@ -1,5 +1,5 @@
 /* testing functions from rsa package */
-package main
+package rsa_function
 import (
 	"os"
 	"fmt"
@@ -41,10 +41,12 @@ func generateKeyPair (bits int) (KeyPair, error){
 		fmt.Println("Failed to generate key pairs.")
 	}
 	keypair := KeyPair {priKey: privateKey, pubKey: &privateKey.PublicKey}
+	fmt.Println("privateKey", keypair.priKey)
+	fmt.Println("publicKey", keypair.pubKey)
 	return keypair, err
 
 }
-func main(){
+func test(){
 	// CIPHERTEXT
 	secretMessage := []byte ("The patrol car is in pursuit.")
 	/*label := []byte ("order")

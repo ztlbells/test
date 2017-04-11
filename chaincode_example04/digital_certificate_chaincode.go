@@ -83,8 +83,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 			return nil, errors.New("Incorrect number of arguments. Expecting 1")
 		}
 		return t.updateDiploma(stub,args)
-	}// new schools or students can be added here for test cases.
-	else if function == "createSchool"{
+	}else if function == "createSchool"{// new schools or students can be added here for test cases.
 		return t.createSchool(stub,args)
 	}else if function == "createStudent"{
 		return t.createStudent(stub,args)
@@ -222,7 +221,7 @@ func (t *SimpleChaincode) createStudent(stub shim.ChaincodeStubInterface, args [
 		return nil,errors.New("Error retrieving schoolBytes")
 	}
 	// get student address
-	fmt.Println("stuAddress:", StudentAddress)
+	fmt.Println("stuAddress:", stuAddress)
 	return studentBytes,nil
 }
 
