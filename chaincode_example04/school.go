@@ -3,11 +3,6 @@ import (
 	"fmt"
 	"./rsa_functions"
 	"crypto/rsa"
-	"crypto/md5"
-	"crypto/rand"
-	"encoding/base64"
-	"encoding/hex"
-	"io"
 )
 
 type School struct{
@@ -26,7 +21,8 @@ func SchoolInitializer(name string) (School, error){
 	}
 
 	var stuAddress []string
-	initializedSchool := School {Name: name, Address:GenerateRandomAddress(), PriKey: keypair.
+	address := rsa_functions.GenerateRandomAddress()
+	initializedSchool := School {Name: name, Address: address, PriKey: keypair.
 						PriKey, PubKey: keypair.PubKey, StudentAddress: stuAddress}
 	return initializedSchool, err
 }
@@ -38,18 +34,6 @@ func SchoolInformation(school School){
 	fmt.Println("PubKey - E (exponent):", school.PubKey.E)
 }
 
-func GenerateRandomAddress() (string){
-	b := make([]byte, 48)
-	if _, err := io.ReadFull(rand.Reader, b); err != nil {
-		return ""
-	}
-
-	h := md5.New()
-	h.Write([]byte(base64.URLEncoding.EncodeToString(b)))
-
-	address := hex.EncodeToString(h.Sum(nil))
-	return address
-}
 
 func main(){
 	SJTU_school, err := SchoolInitializer("SJTU")

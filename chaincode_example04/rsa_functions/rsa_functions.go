@@ -7,6 +7,10 @@ import (
 	"crypto/rsa"
 	"crypto/rand"
 	"crypto/sha256"
+	"crypto/md5"
+	"encoding/base64"
+	"encoding/hex"
+	"io"
 )
 
 
@@ -44,6 +48,21 @@ func GenerateKeyPair (bits int) (KeyPair, error){
 	return keypair, err
 
 }
+
+// generate address: school/student identifier
+func GenerateRandomAddress() (string){
+	b := make([]byte, 48)
+	if _, err := io.ReadFull(rand.Reader, b); err != nil {
+		return ""
+	}
+
+	h := md5.New()
+	h.Write([]byte(base64.URLEncoding.EncodeToString(b)))
+
+	address := hex.EncodeToString(h.Sum(nil))
+	return address
+}
+
 func Test(){
 	// CIPHERTEXT
 	secretMessage := []byte ("The patrol car is in pursuit.")
