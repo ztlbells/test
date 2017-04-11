@@ -1,5 +1,5 @@
 /* testing functions from rsa package */
-package rsa_function
+package rsa_functions
 import (
 	"os"
 	"fmt"
@@ -11,12 +11,12 @@ import (
 
 
 type KeyPair struct{
-	priKey *rsa.PrivateKey
-	pubKey *rsa.PublicKey
+	PriKey *rsa.PrivateKey
+	PubKey *rsa.PublicKey
 }
 
 //encryption
-func generateCiphertext (bits int, secretMessage []byte, label []byte) ([]byte, error){
+func GenerateCiphertext (bits int, secretMessage []byte, label []byte) ([]byte, error){
 
 	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
@@ -35,18 +35,16 @@ func generateCiphertext (bits int, secretMessage []byte, label []byte) ([]byte, 
 }
 
 //generate pri/pub key pair
-func generateKeyPair (bits int) (KeyPair, error){
+func GenerateKeyPair (bits int) (KeyPair, error){
 	privateKey, err := rsa.GenerateKey(rand.Reader, bits)
 	if err != nil {
 		fmt.Println("Failed to generate key pairs.")
 	}
-	keypair := KeyPair {priKey: privateKey, pubKey: &privateKey.PublicKey}
-	fmt.Println("privateKey", keypair.priKey)
-	fmt.Println("publicKey", keypair.pubKey)
+	keypair := KeyPair {PriKey: privateKey, PubKey: &privateKey.PublicKey}
 	return keypair, err
 
 }
-func test(){
+func Test(){
 	// CIPHERTEXT
 	secretMessage := []byte ("The patrol car is in pursuit.")
 	/*label := []byte ("order")
@@ -59,7 +57,7 @@ func test(){
 	fmt.Println("Ciphertext:", ciphertext)*/
 
 	// KEYPAIR GENERATION
-	keypair, err := generateKeyPair(1024)
+	keypair, err := GenerateKeyPair(1024)
 	if err != nil {
 		fmt.Println("Failed to generate keypair.")
 		return
@@ -69,7 +67,7 @@ func test(){
 
 	//SIGN MESSAGE
 	signature_hashed := sha256.Sum256(secretMessage)
-	signature, err := rsa.SignPKCS1v15(rand.Reader, keypair.priKey, crypto.SHA256, signature_hashed[:])
+	signature, err := rsa.SignPKCS1v15(rand.Reader, keypair.PriKey, crypto.SHA256, signature_hashed[:])
 	if err != nil {
 	        fmt.Fprintf(os.Stderr, "Error from signing: %s\n", err)
 	        return
@@ -78,7 +76,7 @@ func test(){
 
 	verification_hashed := sha256.Sum256(secretMessage)
 
-	err = rsa.VerifyPKCS1v15(keypair.pubKey, crypto.SHA256, verification_hashed[:], signature)
+	err = rsa.VerifyPKCS1v15(keypair.PubKey, crypto.SHA256, verification_hashed[:], signature)
 	if err != nil {
 	        fmt.Fprintf(os.Stderr, "Error from verification: %s\n", err)
 	        return
