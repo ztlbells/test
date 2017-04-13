@@ -3,6 +3,7 @@ import (
 	"fmt"
 	"./rsa_functions"
 	"crypto/rsa"
+	"./interactions"
 )
 
 type School struct{
@@ -12,6 +13,7 @@ type School struct{
 	PubKey *rsa.PublicKey
 	StudentAddress []string
 }
+
 
 func SchoolInitializer(name string) (School, error){
 	keypair, err := rsa_functions.GenerateKeyPair (1024) 
@@ -26,6 +28,8 @@ func SchoolInitializer(name string) (School, error){
 						PriKey, PubKey: keypair.PubKey, StudentAddress: stuAddress}
 	return initializedSchool, err
 }
+
+
 
 func SchoolInformation(school School){
 	fmt.Println("School Name:", school.Name)
@@ -42,5 +46,6 @@ func main(){
 		return
 	}
 	SchoolInformation(SJTU_school)
-
+	return_body, _ := interactions.Login("alice", "CMS10pEQlB16", "47.90.123.204:7050")
+	fmt.Println("login return:", return_body)
 }
