@@ -163,7 +163,7 @@ func (t *SimpleChaincode) createSchool(stub shim.ChaincodeStubInterface, args []
 	var stuAddress []string
 	
 	pri := rsa_functions.ProcessStringPriKey(args[2])
-	pub := rsa_functions.ProcessStringPubKey(args[3])
+	pub := rsa_functions.ProcessStringPubKey(args[3]).(*rsa.PublicKey)
 
 	school = School {Name:args[0], Address: args[1], PriKey: pri, PubKey:pub, StudentAddress:stuAddress}
 	err := writeSchool(stub,school)
