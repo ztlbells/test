@@ -3,7 +3,7 @@ import (
 	"fmt"
 	"./rsa_functions"
 	"crypto/rsa"
-	"./interactions"
+	"./interactions" //for login
 	"bytes"
     "io/ioutil"
     "net/http"
@@ -43,10 +43,11 @@ func SchoolInformation(school School){
 	fmt.Println("=======================================")
 }
 
+
 func DeployChaincode_CreateSchool(enrollId string, school School, serverAddress string, chaincodePath string) (string, error){
 	url := "http://" + serverAddress + "/chaincode"
 	// paramater list: Name:args[0], Address: args[1], PriKey:args[2], PubKey:args[3]
-    post := "{	\"jsonrpc\": \"2.0\"," +
+    post := "{\"jsonrpc\": \"2.0\"," +
  				"\"method\": \"deploy\"," +
   				"\"params\": {" +
     						"\"type\": 1," +
@@ -55,14 +56,14 @@ func DeployChaincode_CreateSchool(enrollId string, school School, serverAddress 
     						"}," +
     			"\"ctorMsg\": {" + 
        						"\"args\":[\"init\", \"createSchool\", \"" + school.Name + "\"," +
-       						"\"" + string(school.Address) + "\", \"" + string(school.PriKey) + "\",]" + 
-    						"\"" + string(school.PubKey) + "\"}," + 
+       						"\"" + string(school.Address) + "\", \"" + string(rsa_functions.GetMarshalledPriKey(school.PriKey)) + "\"," + 
+    						"\"" + string(rsa_functions.GetMarshalledPubKey(school.PubKey)) + "\"]}," + 
     			"\"secureContext\": \"" + enrollId + "\"" +
   				"}," + 
   				"\"id\": 1" +
 			"}"
 	fmt.Println(url, " [POST]\n", post)
-    /*var jsonStr = []byte(post)
+    var jsonStr = []byte(post)
     req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
     req.Header.Set("Content-Type", "application/json")
 
@@ -74,7 +75,7 @@ func DeployChaincode_CreateSchool(enrollId string, school School, serverAddress 
     defer resp.Body.Close()
 
     body, _ := ioutil.ReadAll(resp.Body)
-    return string(body), err*/
+    return string(body), err
     return ".", nil
 }
 
@@ -85,9 +86,22 @@ func main(){
 		return
 	}
 	SchoolInformation(SJTU_school)
-	return_body, _ := interactions.Login("alice", "CMS10pEQlB16", "47.90.123.204:7050")
-	fmt.Println("login return:", return_body)
+	login_return_body, _ := interactions.Login("alice", "CMS10pEQlB16", "47.90.123.204:7050")
+	fmt.Println("login return:", login_return_body)
 
-	return_body, _ := DeployChaincode_CreateSchool("alice", SJTU_school, "47.90.123.204:7050", "https://github.com/ztlbells/digital_certificate")
-	fmt.Println("login return:", return_body)
+	/*marshalled_pri := GetMarshalledPriKey(SJTU_school.PriKey)
+	marshalled_pub := GetMarshalledPubKey(SJTU_school.PubKey)
+	
+	fmt.Println("pub:", marshalled_pub)
+
+	string_marshalled_pub := string(marshalled_pub)
+	fmt.Println("string_pub:", string_marshalled_pub)
+
+	
+	//fmt.Println("pub:", marshalled_pub)*/
+
+
+
+	deploy_return_body, _ := DeployChaincode_CreateSchool("alice", SJTU_school, "47.90.123.204:7050", "https://github.com/ztlbells/digital_certificate")
+	fmt.Println("login return:", deploy_return_body)
 }

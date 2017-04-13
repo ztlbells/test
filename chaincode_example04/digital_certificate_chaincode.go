@@ -5,6 +5,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"crypto/rsa"
 	/*"crypto/md5"
 	"crypto/rand"
 	"encoding/base64"
@@ -14,6 +15,7 @@ import (
 	"time"
 	"strconv"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
+	"./rsa_functions"
 )
 
 type SimpleChaincode struct {
@@ -33,8 +35,8 @@ var RecordNo int = 0
 type School struct{
 	Name string
 	Address string
-	PriKey string
-	PubKey string
+	PriKey *rsa.PrivateKey
+	PubKey *rsa.PublicKey
 	StudentAddress []string
 }
 
@@ -66,7 +68,6 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 	}else if function == "createStudent"{
 		return t.createStudent(stub,args)
 	} 
-
 	// return []byte, error, the original code did not have this
 	return nil, nil
 }
@@ -161,7 +162,10 @@ func (t *SimpleChaincode) createSchool(stub shim.ChaincodeStubInterface, args []
 	var schoolBytes []byte
 	var stuAddress []string
 	
-	school = School {Name:args[0], Address: args[1], PriKey:args[2], PubKey:args[3], StudentAddress:stuAddress}
+	pri := rsa_functions.ProcessStringPriKey(args[2])
+	pub := rsa_functions.ProcessStringPubKey(args[3])
+
+	school = School {Name:args[0], Address: args[1], PriKey: pri, PubKey:pub, StudentAddress:stuAddress}
 	err := writeSchool(stub,school)
 	if err != nil{
 		return nil, errors.New("write Error" + err.Error())

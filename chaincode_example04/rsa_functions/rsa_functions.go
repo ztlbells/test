@@ -8,6 +8,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"crypto/md5"
+	"crypto/x509"
 	"encoding/base64"
 	"encoding/hex"
 	"io"
@@ -46,6 +47,42 @@ func GenerateKeyPair (bits int) (KeyPair, error){
 	}
 	keypair := KeyPair {PriKey: privateKey, PubKey: &privateKey.PublicKey}
 	return keypair, err
+
+}
+
+//process pri/pub key to send (marshal)
+func GetMarshalledPriKey(Prikey *rsa.PrivateKey) ([]byte){
+	return x509.MarshalPKCS1PrivateKey(Prikey)
+}
+
+func GetMarshalledPubKey(PubKey *rsa.PublicKey) ([]byte){
+	marshalledPubKey, err := x509.MarshalPKIXPublicKey(PubKey) 
+	if err != nil {     
+		fmt.Println("Failed to marshal PubKey.")
+		var invalidReturn []byte
+		return invalidReturn
+	}
+	return marshalledPubKey
+}
+
+//process received pri/pub key (parse)
+func ProcessStringPriKey(prikeyString string) ( *rsa.PrivateKey){
+	byte_marshalled_pri := []byte(prikeyString)
+	pri, err := x509.ParsePKCS1PrivateKey(byte_marshalled_pri)
+	if err != nil {
+		fmt.Println("Failed to process received prikey.")
+	}
+	return pri
+
+}
+
+func ProcessStringPubKey(pubkeyString string) (interface {}){
+	byte_marshalled_pub := []byte(pubkeyString)
+	pub, err := x509.ParsePKIXPublicKey(byte_marshalled_pub)
+	if err != nil {
+		fmt.Println("Failed to process received pubkey.")
+	}
+	return pub
 
 }
 
