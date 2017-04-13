@@ -4,6 +4,9 @@ import (
 	"./rsa_functions"
 	"crypto/rsa"
 	"./interactions"
+	"bytes"
+    "io/ioutil"
+    "net/http"
 )
 
 type School struct{
@@ -32,12 +35,17 @@ func SchoolInitializer(name string) (School, error){
 
 
 func SchoolInformation(school School){
+	fmt.Println("=======================================")
 	fmt.Println("School Name:", school.Name)
 	fmt.Println("Address:", school.Address)
 	fmt.Println("PubKey - N (modulus):", school.PubKey.N)
 	fmt.Println("PubKey - E (exponent):", school.PubKey.E)
+	fmt.Println("=======================================")
 }
 
+func DeployChaincodeCreateSchool (enrollId string, school School, chaincodePath string) (string error){
+	
+}
 
 func main(){
 	SJTU_school, err := SchoolInitializer("SJTU")

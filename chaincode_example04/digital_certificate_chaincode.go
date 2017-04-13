@@ -5,12 +5,12 @@ package main
 import (
 	"errors"
 	"fmt"
-	"crypto/md5"
+	/*"crypto/md5"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/hex"
+	"io"*/
 	"encoding/json"
-	"io"
 	"time"
 	"strconv"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -32,7 +32,6 @@ var RecordNo int = 0
 
 type School struct{
 	Name string
-	Location string
 	Address string
 	PriKey string
 	PubKey string
@@ -154,36 +153,15 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 
 
 
-//ç”ŸæˆAddress
-func GetAddress() (string,string,string) {
-	var address,priKey,pubKey string
-	b := make([]byte, 48)
-
-	if _, err := io.ReadFull(rand.Reader, b); err != nil {
-		return "","",""
-	}
-
-	h := md5.New()
-	h.Write([]byte(base64.URLEncoding.EncodeToString(b)))
-
-	address = hex.EncodeToString(h.Sum(nil))
-	priKey = address+"1"
-	pubKey = address+"2"
-	return address,priKey,pubKey
-}
-
-
 func (t *SimpleChaincode) createSchool(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	if len(args) != 2{
-		return nil, errors.New("Incorrect number of arguments. Expecting 2")
+	if len(args) != 4{
+		return nil, errors.New("Incorrect number of arguments. Expecting 4")
 	}
 	var school School
 	var schoolBytes []byte
 	var stuAddress []string
-	var address,priKey,pubKey string
-	address,priKey,pubKey = GetAddress()
-
-	school = School {Name:args[0],Location:args[1],Address:address,PriKey:priKey,PubKey:pubKey,StudentAddress:stuAddress}
+	
+	school = School {Name:args[0], Address: args[1], PriKey:args[2], PubKey:args[3], StudentAddress:stuAddress}
 	err := writeSchool(stub,school)
 	if err != nil{
 		return nil, errors.New("write Error" + err.Error())
@@ -193,24 +171,19 @@ func (t *SimpleChaincode) createSchool(stub shim.ChaincodeStubInterface, args []
 	if err!= nil{
 		return nil,errors.New("Error retrieving schoolBytes")
 	}
-	// for test
-	fmt.Println("schoolAddress:", address)
 	return schoolBytes,nil
 }
 
 func (t *SimpleChaincode) createStudent(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	if len(args) != 1{
+	if len(args) != 2{
 		return nil,errors.New("Incorrect number of arguments. Expecting 1")
 	}
 
 	var student Student
 	var studentBytes []byte
-	var stuAddress string 
 	var bgId []int
 
-	stuAddress,_,_ = GetAddress()
-
-	student = Student{Name:args[0],Address:stuAddress,BackgroundId:bgId}
+	student = Student{Name:args[0],Address:args[1],BackgroundId:bgId}
 	err := writeStudent(stub,student)
 	if err != nil{
 		return nil,errors.New("write Error" + err.Error())
@@ -220,8 +193,7 @@ func (t *SimpleChaincode) createStudent(stub shim.ChaincodeStubInterface, args [
 	if err!= nil{
 		return nil,errors.New("Error retrieving schoolBytes")
 	}
-	// get student address
-	fmt.Println("stuAddress:", stuAddress)
+	
 	return studentBytes,nil
 }
 
