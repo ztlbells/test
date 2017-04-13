@@ -102,6 +102,6 @@ func main(){
 
 
 
-	deploy_return_body, _ := DeployChaincode_CreateSchool("alice", SJTU_school, "47.90.123.204:7050", "https://github.com/ztlbells/digital_certificate")
+	deploy_return_body, _ := DeployChaincode_CreateSchool("alice", SJTU_school, "47.90.123.204:7050", "https://github.com/ztlbells/test/chaincode_example04")
 	fmt.Println("login return:", deploy_return_body)
 }
