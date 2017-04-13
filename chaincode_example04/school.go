@@ -43,8 +43,39 @@ func SchoolInformation(school School){
 	fmt.Println("=======================================")
 }
 
-func DeployChaincodeCreateSchool (enrollId string, school School, chaincodePath string) (string error){
-	
+func DeployChaincode_CreateSchool(enrollId string, school School, serverAddress string, chaincodePath string) (string, error){
+	url := "http://" + serverAddress + "/chaincode"
+	// paramater list: Name:args[0], Address: args[1], PriKey:args[2], PubKey:args[3]
+    post := "{	\"jsonrpc\": \"2.0\"," +
+ 				"\"method\": \"deploy\"," +
+  				"\"params\": {" +
+    						"\"type\": 1," +
+    						"\"chaincodeID\":{" +
+      						"\"path\": \"" + chaincodePath +
+    						"}," +
+    			"\"ctorMsg\": {" + 
+       						"\"args\":[\"init\", \"createSchool\", \"" + school.Name + "\"," +
+       						"\"" + string(school.Address) + "\", \"" + string(school.PriKey) + "\",]" + 
+    						"\"" + string(school.PubKey) + "\"}," + 
+    			"\"secureContext\": \"" + enrollId + "\"" +
+  				"}," + 
+  				"\"id\": 1" +
+			"}"
+	fmt.Println(url, " [POST]\n", post)
+    /*var jsonStr = []byte(post)
+    req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        panic(err)
+    }
+    defer resp.Body.Close()
+
+    body, _ := ioutil.ReadAll(resp.Body)
+    return string(body), err*/
+    return ".", nil
 }
 
 func main(){
@@ -55,5 +86,8 @@ func main(){
 	}
 	SchoolInformation(SJTU_school)
 	return_body, _ := interactions.Login("alice", "CMS10pEQlB16", "47.90.123.204:7050")
+	fmt.Println("login return:", return_body)
+
+	return_body, _ := DeployChaincode_CreateSchool("alice", SJTU_school, "47.90.123.204:7050", "https://github.com/ztlbells/digital_certificate")
 	fmt.Println("login return:", return_body)
 }
