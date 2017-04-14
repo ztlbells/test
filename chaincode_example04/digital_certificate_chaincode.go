@@ -1,5 +1,4 @@
 
-
 package main
 
 import (
@@ -10,7 +9,9 @@ import (
 	"time"
 	"strconv"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-	"github.com/test/chaincode_example04/rsa_functions"
+	//"github.com/test/chaincode_example04/rsa_functions" RSA Dependencies
+	"crypto/x509"
+	"encoding/base64"
 )
 
 type SimpleChaincode struct {
@@ -23,9 +24,15 @@ func main() {
 	}
 }
 
-
+// global variables
 var BackGroundNo int = 0
 var RecordNo int = 0
+
+// Structures
+type KeyPair struct{
+	PriKey *rsa.PrivateKey
+	PubKey *rsa.PublicKey
+}
 
 type School struct{
 	Name string
@@ -40,7 +47,6 @@ type Student struct{
 	Address string
 	BackgroundId []int
 }
-
 
 type Background struct{
 	Id int
@@ -57,6 +63,7 @@ type Record struct{
 	ModifyOperation string
 }
 
+// basic functions
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	if function == "createSchool"{
 		return t.createSchool(stub,args)
@@ -148,7 +155,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 }
 
 
-
+// specific functions
 func (t *SimpleChaincode) createSchool(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	if len(args) != 4{
 		return nil, errors.New("Incorrect number of arguments. Expecting 4")
@@ -157,8 +164,8 @@ func (t *SimpleChaincode) createSchool(stub shim.ChaincodeStubInterface, args []
 	var schoolBytes []byte
 	var stuAddress []string
 	
-	pri := rsa_functions.ProcessStringPriKey(args[2])
-	pub := rsa_functions.ProcessStringPubKey(args[3]).(*rsa.PublicKey)
+	pri := ProcessStringPriKey(args[2])
+	pub := ProcessStringPubKey(args[3]).(*rsa.PublicKey)
 
 	school = School {Name:args[0], Address: args[1], PriKey: pri, PubKey:pub, StudentAddress:stuAddress}
 	err := writeSchool(stub,school)
@@ -172,8 +179,6 @@ func (t *SimpleChaincode) createSchool(stub shim.ChaincodeStubInterface, args []
 	}
 	return schoolBytes,nil
 }
-
-
 
 func (t *SimpleChaincode) createStudent(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	if len(args) != 2{
@@ -288,6 +293,7 @@ func (t *SimpleChaincode) updateDiploma(stub shim.ChaincodeStubInterface, args [
 	return recordBytes,nil
 }
 
+// GET functions (get state)
 func getStudentByAddress(stub shim.ChaincodeStubInterface, address string) (Student,[]byte, error) {
 	var student Student
 	stuBytes,err := stub.GetState("address")
@@ -315,7 +321,6 @@ func getSchoolByAddress(stub shim.ChaincodeStubInterface,address string)(School,
 	}
 	return school,schBytes,nil
 }
-
 
 func getRecordById(stub shim.ChaincodeStubInterface, id string) (Record,[]byte, error) {
 	var record Record
@@ -377,6 +382,7 @@ func getBackgroundById(stub shim.ChaincodeStubInterface,id string)(Background,[]
 	return background,backBytes,nil
 }
 
+//  WRITE functions (put state)
 func writeRecord(stub shim.ChaincodeStubInterface,record Record) (error) {
 	var recId string
 	recordBytes,err :=json.Marshal(&record)
@@ -433,3 +439,30 @@ func writeBackground(stub shim.ChaincodeStubInterface,background Background)(err
 	return nil	
 }
 
+// RSA functions 
+
+//process received pri/pub key (parse)
+func ProcessStringPriKey(prikeyString string) (*rsa.PrivateKey){
+	byte_marshalled_pri, err_ := base64.URLEncoding.DecodeString(prikeyString)
+	if err_ != nil {
+		fmt.Println("Failed to decode received prikey.")
+	}
+	pri, err := x509.ParsePKCS1PrivateKey(byte_marshalled_pri)
+	if err != nil {
+		fmt.Println("Failed to parse received prikey.")
+	}
+	return pri
+}
+
+func ProcessStringPubKey(pubkeyString string) (interface {}){
+
+	byte_marshalled_pub, err_ := base64.URLEncoding.DecodeString(pubkeyString)
+	if err_ != nil {
+		fmt.Println("Failed to decode received prikey.")
+	}
+	pub, err := x509.ParsePKIXPublicKey(byte_marshalled_pub)
+	if err != nil {
+		fmt.Println("Failed to process received pubkey.")
+	}
+	return pub
+}

@@ -90,19 +90,6 @@ func main(){
 	login_return_body, _ := interactions.Login("alice", "CMS10pEQlB16", "47.90.123.204:7050")
 	fmt.Println("login return:", login_return_body)
 
-	/*marshalled_pri := GetMarshalledPriKey(SJTU_school.PriKey)
-	marshalled_pub := GetMarshalledPubKey(SJTU_school.PubKey)
-	
-	fmt.Println("pub:", marshalled_pub)
-
-	string_marshalled_pub := string(marshalled_pub)
-	fmt.Println("string_pub:", string_marshalled_pub)
-
-	
-	//fmt.Println("pub:", marshalled_pub)*/
-
-
-
-	deploy_return_body, _ := DeployChaincode_CreateSchool("alice", SJTU_school, "47.90.123.204:7050", " git@github.com/ztlbells/test/chaincode_example04")
+	deploy_return_body, _ := DeployChaincode_CreateSchool("alice", SJTU_school, "47.90.123.204:7050", "https://github.com/ztlbells/test/chaincode_example04")
 	fmt.Println("login return:", deploy_return_body)
 }
