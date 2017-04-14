@@ -51,33 +51,39 @@ func GenerateKeyPair (bits int) (KeyPair, error){
 }
 
 //process pri/pub key to send (marshal)
-func GetMarshalledPriKey(Prikey *rsa.PrivateKey) ([]byte){
-	return x509.MarshalPKCS1PrivateKey(Prikey)
+func GetMarshalledPriKeyString(Prikey *rsa.PrivateKey) (string){
+	return base64.URLEncoding.EncodeToString(x509.MarshalPKCS1PrivateKey(Prikey))
 }
 
-func GetMarshalledPubKey(PubKey *rsa.PublicKey) ([]byte){
+func GetMarshalledPubKey(PubKey *rsa.PublicKey) (string){
 	marshalledPubKey, err := x509.MarshalPKIXPublicKey(PubKey) 
 	if err != nil {     
 		fmt.Println("Failed to marshal PubKey.")
-		var invalidReturn []byte
-		return invalidReturn
+		return ""
 	}
-	return marshalledPubKey
+	return base64.URLEncoding.EncodeToString(marshalledPubKey)
 }
 
 //process received pri/pub key (parse)
-func ProcessStringPriKey(prikeyString string) ( *rsa.PrivateKey){
-	byte_marshalled_pri := []byte(prikeyString)
+func ProcessStringPriKey(prikeyString string) (*rsa.PrivateKey){
+	byte_marshalled_pri, err_ := base64.URLEncoding.DecodeString(prikeyString)
+	if err_ != nil {
+		fmt.Println("Failed to decode received prikey.")
+	}
 	pri, err := x509.ParsePKCS1PrivateKey(byte_marshalled_pri)
 	if err != nil {
-		fmt.Println("Failed to process received prikey.")
+		fmt.Println("Failed to parse received prikey.")
 	}
 	return pri
 
 }
 
 func ProcessStringPubKey(pubkeyString string) (interface {}){
-	byte_marshalled_pub := []byte(pubkeyString)
+
+	byte_marshalled_pub, err_ := base64.URLEncoding.DecodeString(pubkeyString)
+	if err_ != nil {
+		fmt.Println("Failed to decode received prikey.")
+	}
 	pub, err := x509.ParsePKIXPublicKey(byte_marshalled_pub)
 	if err != nil {
 		fmt.Println("Failed to process received pubkey.")

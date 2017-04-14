@@ -3,6 +3,7 @@ import (
 	"fmt"
 	"../rsa_functions"
 	"crypto/rsa"
+	"encoding/base64"
 	"../interactions" //for login
 	"bytes"
     "io/ioutil"
@@ -19,7 +20,7 @@ type School struct{
 
 
 func SchoolInitializer(name string) (School, error){
-	keypair, err := rsa_functions.GenerateKeyPair (1024) 
+	keypair, err := rsa_functions.GenerateKeyPair (256) 
 	if err != nil {
 		fmt.Println("Key pair generation failed.")
 		// cannot handle the error here, may change it later
@@ -53,15 +54,16 @@ func DeployChaincode_CreateSchool(enrollId string, school School, serverAddress 
     						"\"type\": 1," +
     						"\"chaincodeID\":{" +
       						"\"path\": \"" + chaincodePath +
-    						"}," +
+    						"\"}," +
     			"\"ctorMsg\": {" + 
        						"\"args\":[\"init\", \"createSchool\", \"" + school.Name + "\"," +
-       						"\"" + string(school.Address) + "\", \"" + string(rsa_functions.GetMarshalledPriKey(school.PriKey)) + "\"," + 
-    						"\"" + string(rsa_functions.GetMarshalledPubKey(school.PubKey)) + "\"]}," + 
+       						"\"" + string(school.Address) + "\", \"" + rsa_functions.GetMarshalledPriKey(school.PriKey) + "\"," + 
+    						"\"" + rsa_functions.GetMarshalledPubKey(school.PubKey) + "\"]}," + 
     			"\"secureContext\": \"" + enrollId + "\"" +
   				"}," + 
   				"\"id\": 1" +
 			"}"
+			
 	fmt.Println(url, " [POST]\n", post)
     var jsonStr = []byte(post)
     req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
