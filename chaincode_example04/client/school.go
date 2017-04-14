@@ -1,10 +1,9 @@
 package main 
 import (
 	"fmt"
-	"../rsa_functions"
+	"github.com/test/chaincode_example04/rsa_functions"
 	"crypto/rsa"
-	"encoding/base64"
-	"../interactions" //for login
+	"github.com/test/chaincode_example04/interactions" //for login
 	"bytes"
     "io/ioutil"
     "net/http"
@@ -57,13 +56,13 @@ func DeployChaincode_CreateSchool(enrollId string, school School, serverAddress 
     						"\"}," +
     			"\"ctorMsg\": {" + 
        						"\"args\":[\"init\", \"createSchool\", \"" + school.Name + "\"," +
-       						"\"" + string(school.Address) + "\", \"" + rsa_functions.GetMarshalledPriKey(school.PriKey) + "\"," + 
-    						"\"" + rsa_functions.GetMarshalledPubKey(school.PubKey) + "\"]}," + 
+       						"\"" + string(school.Address) + "\", \"" + rsa_functions.GetMarshalledPriKeyString(school.PriKey) + "\"," + 
+    						"\"" + rsa_functions.GetMarshalledPubKeyString(school.PubKey) + "\"]}," + 
     			"\"secureContext\": \"" + enrollId + "\"" +
   				"}," + 
   				"\"id\": 1" +
 			"}"
-			
+
 	fmt.Println(url, " [POST]\n", post)
     var jsonStr = []byte(post)
     req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))

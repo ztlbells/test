@@ -1,7 +1,7 @@
 package main 
 import (
 	"fmt"
-	"../rsa_functions"
+	"github.com/test/chaincode_example04/rsa_functions"
 )
 
 type Student struct{

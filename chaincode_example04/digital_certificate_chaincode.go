@@ -6,16 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"crypto/rsa"
-	/*"crypto/md5"
-	"crypto/rand"
-	"encoding/base64"
-	"encoding/hex"
-	"io"*/
 	"encoding/json"
 	"time"
 	"strconv"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
-	"./rsa_functions"
+	"github.com/test/chaincode_example04/rsa_functions"
 )
 
 type SimpleChaincode struct {
@@ -177,6 +172,8 @@ func (t *SimpleChaincode) createSchool(stub shim.ChaincodeStubInterface, args []
 	}
 	return schoolBytes,nil
 }
+
+
 
 func (t *SimpleChaincode) createStudent(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	if len(args) != 2{

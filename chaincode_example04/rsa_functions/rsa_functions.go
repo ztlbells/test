@@ -55,7 +55,7 @@ func GetMarshalledPriKeyString(Prikey *rsa.PrivateKey) (string){
 	return base64.URLEncoding.EncodeToString(x509.MarshalPKCS1PrivateKey(Prikey))
 }
 
-func GetMarshalledPubKey(PubKey *rsa.PublicKey) (string){
+func GetMarshalledPubKeyString(PubKey *rsa.PublicKey) (string){
 	marshalledPubKey, err := x509.MarshalPKIXPublicKey(PubKey) 
 	if err != nil {     
 		fmt.Println("Failed to marshal PubKey.")
