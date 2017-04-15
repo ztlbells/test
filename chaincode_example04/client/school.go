@@ -1,9 +1,11 @@
 package main 
 import (
 	"fmt"
+	"errors"
 	"github.com/test/chaincode_example04/rsa_functions"
+	"github.com/test/chaincode_example04/interactions" 
+	"github.com/go-simplejson"
 	"crypto/rsa"
-	"github.com/test/chaincode_example04/interactions" //for login
 	"bytes"
     "io/ioutil"
     "net/http"
@@ -63,7 +65,7 @@ func DeployChaincode_CreateSchool(enrollId string, school School, serverAddress 
   				"\"id\": 1" +
 			"}"
 
-	fmt.Println(url, " [POST]\n", post)
+	//fmt.Println(url, " [POST]\n", post)
     var jsonStr = []byte(post)
     req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
     req.Header.Set("Content-Type", "application/json")
@@ -80,6 +82,21 @@ func DeployChaincode_CreateSchool(enrollId string, school School, serverAddress 
     return ".", nil
 }
 
+func GetCCID(jsonBody string) (string, error){
+	js, err := simplejson. NewJson([]byte(jsonBody))
+	if err != nil {
+		fmt.Println("Failed to read input bytes.")
+		return "", errors.New("Failed to create NewJson.")
+	}
+	// {"jsonrpc":"2.0",
+	//	"result":{
+	//				"status":"OK",
+	//				"message":"b9844a9c732801222f3e07e2b832904363823930db4b4e44cd8969a41bc80d2553514002c298157d5f4c47d325ceb9bc0dd6d8b098d0482baebf75ee826168c1"
+	//			},
+	//	"id":1}
+	CC_ID := js.Get("result").Get("message").MustString()
+	return CC_ID, nil
+}
 func main(){
 	SJTU_school, err := SchoolInitializer("SJTU")
 	if err != nil {
@@ -91,5 +108,10 @@ func main(){
 	fmt.Println("login return:", login_return_body)
 
 	deploy_return_body, _ := DeployChaincode_CreateSchool("alice", SJTU_school, "47.90.123.204:7050", "https://github.com/ztlbells/test/chaincode_example04")
-	fmt.Println("login return:", deploy_return_body)
+	fmt.Println("create return:", deploy_return_body)
+
+	CC_ID, _ := GetCCID(deploy_return_body)
+	fmt.Println("CC_ID:", CC_ID)
+	//query_return_body, _ :
+
 }
