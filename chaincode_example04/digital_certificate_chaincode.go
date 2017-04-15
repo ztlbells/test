@@ -311,7 +311,7 @@ func getStudentByAddress(stub shim.ChaincodeStubInterface, address string) (Stud
 
 func getSchoolByAddress(stub shim.ChaincodeStubInterface, address string)(School,[]byte,error){
 	var school School
-	schBytes,err := stub.GetState("address")
+	schBytes,err := stub.GetState(address)
 	if err != nil{
 		fmt.Println("Error retrieving data")
 	}
