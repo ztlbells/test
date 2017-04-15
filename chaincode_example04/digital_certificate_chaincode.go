@@ -320,6 +320,7 @@ func getSchoolByAddress(stub shim.ChaincodeStubInterface, address string)(School
 	if err != nil{
 		fmt.Println("Error unmarshalling data")
 	}
+	fmt.Println("school name:", school.Name)
 	return school,schBytes,nil
 
 }
