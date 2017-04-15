@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"crypto/rsa"
 	"encoding/json"
-	"time"
+	//"time"
 	"strconv"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	//"github.com/test/chaincode_example04/rsa_functions" RSA Dependencies
@@ -39,13 +39,14 @@ type School struct{
 	Address string
 	PriKey *rsa.PrivateKey
 	PubKey *rsa.PublicKey
-	StudentAddress []string
+	StudentAddress map[string]string // studentAddress : txid
 }
 
 type Student struct{
 	Name string
 	Address string
 	BackgroundId []int
+	//SchoolAddress map[string]string // schoolAddress : recordCode
 }
 
 type Background struct{
@@ -75,7 +76,7 @@ func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string
 }
 
 func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	if function == "enrollStudent"{
+	/*if function == "enrollStudent"{
 		if len(args)!= 3{
 			return nil, errors.New("Incorrect number of arguments. Expecting 1")
 		}
@@ -85,7 +86,7 @@ func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 			return nil, errors.New("Incorrect number of arguments. Expecting 1")
 		}
 		return t.updateDiploma(stub,args)
-	}else if function == "createSchool"{// new schools or students can be added here for test cases.
+	}else */if function == "createSchool"{// new schools or students can be added here for test cases.
 		return t.createSchool(stub,args)
 	}else if function == "createStudent"{
 		return t.createStudent(stub,args)
@@ -100,7 +101,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		}
 		_,stuBytes, err := getStudentByAddress(stub,args[0])
 		if err != nil {
-			fmt.Println("Error get centerBank")
+			fmt.Println("Error get studentInfo")
 			return nil, err
 		}
 		return stuBytes, nil
@@ -134,8 +135,8 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 		}
 		_,schBytes, err := getSchoolByAddress(stub,args[0])
 		if err != nil {
-			fmt.Println("Error get centerBank")
-			return nil, err
+			jsonResp := "{\"Error\":\"Failed to get state for <" + args[0] + ">\"}"
+			return nil, errors.New(jsonResp)
 		}
 		return schBytes, nil
 	}else if function == "getBackgroundById"{
@@ -162,7 +163,7 @@ func (t *SimpleChaincode) createSchool(stub shim.ChaincodeStubInterface, args []
 	}
 	var school School
 	var schoolBytes []byte
-	var stuAddress []string
+	stuAddress := make(map[string]string)
 	
 	pri := ProcessStringPriKey(args[2])
 	pub := ProcessStringPubKey(args[3]).(*rsa.PublicKey)
@@ -203,7 +204,7 @@ func (t *SimpleChaincode) createStudent(stub shim.ChaincodeStubInterface, args [
 	return studentBytes,nil
 }
 
-func (t *SimpleChaincode) enrollStudent(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+/*func (t *SimpleChaincode) enrollStudent(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	school,_,error:=getSchoolByAddress(stub,args[0])
 	// did not use schoBytes.. repalce it w/ _ so as the StuBytes in line 225
 	if error != nil{
@@ -233,7 +234,7 @@ func (t *SimpleChaincode) enrollStudent(stub shim.ChaincodeStubInterface, args [
 	// also, i don't think calling writeStudent is necessary here, as nothing changed in student's info
 	if err!= nil{
 		return nil,errors.New("Error write data")
-	}*/
+	}
 
 	RecordNo = RecordNo + 1
 	recordBytes,err = json.Marshal(&record)
@@ -243,9 +244,9 @@ func (t *SimpleChaincode) enrollStudent(stub shim.ChaincodeStubInterface, args [
 	}
 
 	return recordBytes,nil
-}
+}*/
 
-func (t *SimpleChaincode) updateDiploma(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+/*func (t *SimpleChaincode) updateDiploma(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	var recordBytes []byte
 	school,_,error:=getSchoolByAddress(stub,args[0])
 	if error != nil{
@@ -291,12 +292,12 @@ func (t *SimpleChaincode) updateDiploma(stub shim.ChaincodeStubInterface, args [
 	}
 
 	return recordBytes,nil
-}
+}*/
 
 // GET functions (get state)
 func getStudentByAddress(stub shim.ChaincodeStubInterface, address string) (Student,[]byte, error) {
 	var student Student
-	stuBytes,err := stub.GetState("address")
+	stuBytes,err := stub.GetState(address)
 	if err != nil {
 		fmt.Println("Error retrieving data")
 	}
@@ -308,7 +309,7 @@ func getStudentByAddress(stub shim.ChaincodeStubInterface, address string) (Stud
 	return student,stuBytes, nil
 }
 
-func getSchoolByAddress(stub shim.ChaincodeStubInterface,address string)(School,[]byte,error){
+func getSchoolByAddress(stub shim.ChaincodeStubInterface, address string)(School,[]byte,error){
 	var school School
 	schBytes,err := stub.GetState("address")
 	if err != nil{
@@ -320,6 +321,7 @@ func getSchoolByAddress(stub shim.ChaincodeStubInterface,address string)(School,
 		fmt.Println("Error unmarshalling data")
 	}
 	return school,schBytes,nil
+
 }
 
 func getRecordById(stub shim.ChaincodeStubInterface, id string) (Record,[]byte, error) {
